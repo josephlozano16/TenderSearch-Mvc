@@ -1,0 +1,11 @@
+﻿@model IPagedList<AspNetUser>
+
+@Html.Partial("_LayoutIndex",
+                Model,
+                new ViewDataDictionary {{ "Title", ViewBag.Title },
+                                        { "ReturnUrl", ViewBag.ReturnUrl },
+                                        { "ParentId", ViewBag.ParentId },
+                                        { "searchTerm", ViewBag.searchTerm },
+                                        { "PAGE_SIZE", ViewBag.PAGE_SIZE},
+                                        { "AllowCreate",false}}
+                )

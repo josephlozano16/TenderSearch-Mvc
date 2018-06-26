@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.ParentId = ViewData["ParentId"];
+    ViewBag.Title = ViewData["Title"];
+    ViewBag.ReturnUrl = ViewData["ReturnUrl"];
+    ViewBag.CreateActionName = ViewData["CreateActionName"];
+    ViewBag.ControllerName = ViewData["ControllerName"];
+    if (ViewBag.CreateActionName == null) { ViewBag.CreateActionName = "Create"; }
+
+
+    //Singularize Title
+    string ajaxTitle = ViewBag.Title;
+    ajaxTitle = ajaxTitle.Replace("Setup ", "");
+    ajaxTitle = ajaxTitle.Replace("Selection", "");
+    ajaxTitle = ajaxTitle.Trim();
+    if (ajaxTitle.Substring(ajaxTitle.Length - 3, 3) == "ies")
+    {
+        ajaxTitle = ajaxTitle.Substring(0, ajaxTitle.Length - 3);
+        ajaxTitle = ajaxTitle + "y";
+    }
+    else if (ajaxTitle.Substring(ajaxTitle.Length - 1, 1) == "s")
+    {
+            ajaxTitle = ajaxTitle.Substring(0, ajaxTitle.Length - 1);
+    }
+    ViewBag.Title = ajaxTitle;
+}
+
+<a href="@Url.Action(@ViewBag.CreateActionName as string, @ViewBag.ControllerName as string,
+                    new { @ParentId = @ViewBag.ParentId, @ReturnUrl = @ViewBag.ReturnUrl })"
+   class="btn btn-info btn-xs"
+   data-target="#createItemModal"
+   data-qpse-createlink="true"
+   data-qpse-createname="@ViewBag.Title">
+    <i class="fa fa-plus-circle"></i>&nbsp;Add
+</a>
+
+
+

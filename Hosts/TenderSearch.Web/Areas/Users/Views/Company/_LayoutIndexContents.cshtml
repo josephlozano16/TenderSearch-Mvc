@@ -1,0 +1,61 @@
+﻿@model IPagedList<Company>
+
+@{
+    ViewBag.ReturnUrl = ViewData["ReturnUrl"];
+}
+
+<tr>
+    <th>
+        @Html.DisplayNameFor(model => model.First().Name)
+
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.First().Description)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.First().Website)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.First().AbnCan)
+    </th>
+    <th>
+        @Html.Partial("_AddButtonAjax",
+                        new ViewDataDictionary {{ "ParentId",  ViewBag.ParentId },
+                                        { "ReturnUrl",  ViewBag.ReturnUrl },
+                                        { "CreateActionName",  ViewBag.CreateActionName},
+                                        { "Title", ViewBag.Title} })
+
+        
+    </th>
+</tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td nowrap>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Website)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AbnCan)
+        </td>
+        <td>
+            @Html.Partial("_EditDetailsDelete",
+                new ViewDataDictionary {{ "ID", item.Id },
+                                        { "ReturnUrl",  ViewBag.ReturnUrl },
+                                        { "AllowDetails",   false  },
+                                        { "AllowCopy",   true  },
+                                        { "TargetName", item.Name },
+                                        { "AllowEditModal",  true} ,
+                                        { "AllowContracts",  true} ,
+                                        { "ParentId",  item.Id },
+                                        { "AllowContactPersons",  true} }
+                )
+        </td>
+    </tr>
+}

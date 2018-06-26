@@ -1,0 +1,65 @@
+﻿@model IPagedList<AspNetUser>
+
+@{
+    ViewBag.ReturnUrl = ViewData["ReturnUrl"];
+}
+
+<tr>
+    <th>
+        @Html.DisplayNameFor(model => model.First().UserName)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.First().Email)
+    </th>
+    <th>
+        Role
+    </th>
+    <th>
+
+    </th>
+</tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        @if (item.HasRole)
+        {
+            <td nowrap>
+                @Html.ActionLink(item.UserName, "GetChildren", new { @ParentId = item.UserName, @ReturnToParentListURL = @ViewBag.ReturnUrl })
+            </td>
+            <td nowrap>
+                @Html.DisplayTextFor(modelItem => item.Email)
+            </td>
+            <td nowrap>
+                @{
+                    var cRoles = string.Join("; ", item.Roles.ToArray());
+                    ViewBag.Roles = cRoles;
+                }
+                @ViewBag.Roles
+                @*@Html.DisplayFor(modelItem => string.Join("; ",item.Roles.ToArray()))*@
+            </td>
+        }
+        else
+        {
+            <td nowrap class="text-danger">
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td nowrap class="text-danger">
+                @Html.DisplayTextFor(modelItem => item.Email)
+            </td>
+            <td nowrap align="center">
+                @Html.ActionLink("Add Role", "GetChildren", new { @ParentId = item.UserName, @ReturnToParentListURL = @ViewBag.ReturnUrl }, htmlAttributes: new { @class = "btn btn-xs btn-danger" })
+            </td>
+        }
+        <td>
+            @Html.Partial("_EditDetailsDelete",
+                                    new ViewDataDictionary {{ "ID", item.UserName },
+                                        { "ReturnUrl",  @ViewBag.ReturnUrl },
+                                        { "AllowEdit",  false },
+                                        { "AllowDetails",  false },
+                                        { "AllowEditModal",  true },
+                                        { "RoleName",  item.UserName},
+                                        { "TargetName", item.UserName} })
+        </td>
+    </tr>
+}

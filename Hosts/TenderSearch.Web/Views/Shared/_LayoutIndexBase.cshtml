@@ -1,0 +1,212 @@
+﻿@model IPagedList<Object>
+
+@*ViewDataDictionary is supplied by the root caller of this page. **Index -> _LayoutIndex -> _LayoutIndexBase*@
+@{
+    ViewBag.Title = ViewData["Title"];
+    ViewBag.ReturnUrl = ViewData["ReturnUrl"];
+    ViewBag.ParentId = ViewData["ParentId"];
+    ViewBag.searchTerm = ViewData["searchTerm"];
+    ViewBag.ParentLabel = ViewData["ParentLabel"]; //optional
+    ViewBag.ParentSubLabel = ViewData["ParentSubLabel"]; //optional
+    ViewBag.CustomIndex = ViewData["CustomIndex"]; //optional
+    ViewBag.ReturnToParentListURL = ViewData["ReturnToParentListURL"]; //optional
+    ViewBag.AllowCreate = ViewData["AllowCreate"]; //optional
+                                                   //TODO Derive a unique/dynamic table name for pagedTable - search related functionality pagedTable
+    ViewBag.AllowSearch = ViewData["AllowSearch"]; //optional
+    ViewBag.LayoutIndexContents = ViewData["LayoutIndexContents"]; //optional
+    ViewBag.AllowTitle = ViewData["AllowTitle"]; //optional
+    ViewBag.AllowParentLabel = ViewData["AllowParentLabel"]; //optional
+    ViewBag.AllowPagedList = ViewData["AllowPagedList"]; //optional
+    ViewBag.TargetTableBody = ViewData["TargetTable"];//optional
+    ViewBag.TargetTableContainer = ViewData["TargetTableContainer"];//optional
+    ViewBag.PageContainer = ViewData["PageContainer"];//optional
+    ViewBag.PAGE_SIZE = ViewData["PAGE_SIZE"];
+    ViewBag.ControllerName = ViewData["ControllerName"];
+    ViewBag.SendEmailCaption = ViewData["SendEmailCaption"];
+
+    if (ViewBag.AllowSearch == null) { ViewBag.AllowSearch = true; }
+    if (ViewBag.LayoutIndexContents == null) { ViewBag.LayoutIndexContents = "_LayoutIndexContents"; }
+    if (ViewBag.AllowTitle == null) { ViewBag.AllowTitle = true; }
+    if (ViewBag.AllowParentLabel == null) { ViewBag.AllowParentLabel = true; }
+    if (ViewBag.AllowPagedList == null) { ViewBag.AllowPagedList = true; }
+    if (ViewBag.TargetTableBody == null) { ViewBag.TargetTableBody = "pagedTable"; }
+    if (ViewBag.TargetTableContainer == null) { ViewBag.TargetTableContainer = "tableContainer"; }
+    if (ViewBag.PageContainer == null) { ViewBag.PageContainer = "pageContainer"; }
+
+    ViewBag.CreateActionName = ViewData["CreateActionName"]; //Optional
+    if (ViewBag.CreateActionName == null) { ViewBag.CreateActionName = "Create"; }
+
+
+    if (ViewBag.PageNumber == null) { ViewBag.PageNumber = 1; }
+
+    if (ViewBag.AllowManualSorting == null) { ViewBag.AllowManualSorting = false; }
+    if (ViewBag.IsTableContainer == null) { ViewBag.IsTableContainer = true; }
+
+    ViewBag.SortActionName = ViewData["SortActionName"]; //Optional
+    if (ViewBag.SortActionName == null) { ViewBag.SortActionName = "Sort"; }
+
+}
+
+<div class="row">
+    <div class="col-md-8 col-lg-8">
+        @{
+            if (ViewBag.AllowTitle)
+            {
+                <h2 class="animated  fadeIn">@ViewBag.Title</h2>
+            }
+
+            if (ViewBag.ParentId != null && ViewBag.AllowParentLabel)
+            {
+                if (@ViewBag.ParentLabel == null && String.IsNullOrEmpty(@ViewBag.ParentLabel))
+                {
+                    <h2><em><strong>ParentLabel is empty. Check your Index.cshtml and pass along the ViewBag.ParentLabel.</strong></em></h2>
+                }
+                else
+                {
+
+                    <h2 class="animated bounce"><em><strong>@ViewBag.ParentLabel</strong></em></h2>
+                    if (@ViewBag.ParentSubLabel != null)
+                    {
+                        <h4 class="animated fadeInDown"> <strong>@ViewBag.ParentSubLabel</strong> </h4>
+                    }
+                }
+            }
+            if (ViewBag.AllowCreate == null || Convert.ToBoolean(ViewBag.AllowCreate) == true)
+            {
+                <p>
+
+                    @Html.ActionLink("Create New",
+                                      @ViewBag.CreateActionName as string, @ViewBag.ControllerName as string,
+                                     new { @ParentId = @ViewBag.ParentId, @ReturnUrl = @ViewBag.ReturnUrl },
+                                      new
+                                      {
+                                          data_qpse_createlink = "false",
+                                          data_qpse_createname = @ViewBag.Title,
+                                          data_target = "#createItemModal"
+                                      })
+                </p>
+            }
+        }
+    </div>
+
+    @if (ViewBag.AllowSearch)
+    {
+        <div class="col-md-4 col-lg-4 ">
+
+            @Html.Partial("_Search", new ViewDataDictionary {{ "ControllerName", @ViewBag.ControllerName },
+                                                              { "TargetTableBody", @ViewBag.TargetTableBody } ,
+                                                              { "ReturnToParentListURL", @ViewBag.ReturnUrl },
+                                                              { "ParentId", @ViewBag.ParentId }
+                                                                        })
+        </div>
+    }
+    else
+    {
+        <div class="col-md-4 col-lg-4 " style="display:none;">
+            @Html.Partial("_Search", new ViewDataDictionary {{ "ControllerName", @ViewBag.ControllerName },
+                                                              { "TargetTableBody", @ViewBag.TargetTableBody } ,
+                                                              { "ReturnToParentListURL", @ViewBag.ReturnUrl },
+                                                              { "ParentId", @ViewBag.ParentId }
+                                                                        })
+        </div>
+    }
+
+</div>
+
+@*pagedTable is the data-qpse-targettablebody in qpse.js. pagedTable will be replaced during search  *@
+@*style="overflow-x: scroll; " ViewBag.AllowManualSorting*@
+
+<div style="overflow-x: auto; ">
+    <table>
+        <tr>
+            <td>
+                <div data-qpse-tablecontainer=@ViewBag.IsTableContainer>
+                    <table class="table table-striped table-hover table-bordered ">
+                        <tbody id="@ViewBag.TargetTableBody">
+                            @*also apply all changes here to _LayoutIndexContentsAjax  ViewBag.PAGE_SIZE*@
+                            @Html.Partial(@ViewBag.LayoutIndexContents as string, Model,
+                                          new ViewDataDictionary {
+                                              { "ReturnUrl", @ViewBag.ReturnUrl },
+                                              { "ParentId", @ViewBag.ParentId },
+                                              { "Title", @ViewBag.Title },
+                                              { "AllowManualSorting", @ViewBag.AllowManualSorting },
+                                              { "ControllerName", @ViewBag.ControllerName },
+                                              { "PAGE_SIZE", @ViewBag.PAGE_SIZE },
+                                              { "CreateActionName", @ViewBag.CreateActionName }})
+                        </tbody>
+                    </table>
+                </div>
+            </td>
+            @{if (@ViewBag.AllowManualSorting && Model != null && Model.Count > 0)
+            {
+
+                    <td>
+                        <div class="btn-group-vertical" role="group" style="margin: 0px 3px 3px;">
+                            <button data-qpse-sorttarget="#@ViewBag.TargetTableBody" data-qpse-sortdirection="up" class="btn btn-info btn-xs disabled" title="Move Up"><i class="fa fa-2x fa-arrow-circle-up"></i> </button>
+                            <button data-qpse-sorttarget="#@ViewBag.TargetTableBody" data-qpse-sortdirection="down" class="btn btn-info btn-xs disabled" title="Move Down"><i class=" fa fa-2x fa-arrow-circle-down"></i></button>
+                        </div><br />
+                        @using (Html.BeginForm(@ViewBag.SortActionName as string,
+                @ViewBag.ControllerName as string,
+                null,
+                FormMethod.Post,
+                new { data_qpse_sortorderconfirmation = "true" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("parentId", @ViewBag.ParentId as int?)
+                            @Html.Hidden("page", @ViewBag.PageNumber as int?)
+                            @Html.Hidden("sortItems", "")
+                            <div class="btn-group-vertical" role="group" style="margin: 0px 3px 3px;">
+                                <button type="submit" value="Save" class="btn btn-primary btn-xs disabled" title="Save" data-qpse-sorttarget="#@ViewBag.TargetTableBody" data-qpse-sortrole="save">
+                                    <i class="fa fa-2x fa-save"></i>
+                                </button>
+                            </div>
+                        }
+
+                    </td>
+                }
+            }
+        </tr>
+    </table>
+
+</div>
+
+
+@{
+    if (@ViewBag.SendEmailCaption != null)
+    {
+        @Html.Partial("_EmailButtonAjax",
+                        new ViewDataDictionary {{ "ParentId",  @ViewBag.ParentId },
+                                        { "ReturnUrl",  @ViewBag.ReturnUrl },
+                                        { "SendEmailCaption", @ViewBag.SendEmailCaption} })
+    }
+
+    if (@ViewBag.ReturnToParentListURL != null)
+    {
+        <div style="margin: 20px 20px 20px 0px;">
+            @Html.ActionLink("Back to Main", "Goto", new { @ReturnUrl = @ViewBag.ReturnToParentListURL })
+        </div>
+    }
+
+
+    @*also apply all changes here to _LayoutIndexContentsAjax*@
+    if (@ViewBag.AllowPagedList)
+    {
+        @Html.Partial("_PagedList", Model,
+                             new ViewDataDictionary { { "TargetTableBody", @ViewBag.TargetTableBody },
+                        { "PageContainer", @ViewBag.PageContainer },
+                        { "ParentId", @ViewBag.ParentId },
+                        { "PAGE_SIZE", @ViewBag.PAGE_SIZE },
+                        { "ControllerName", @ViewBag.ControllerName },
+                        { "ReturnToParentListURL", @ViewBag.ReturnUrl },
+                        { "IsTableContainer", @ViewBag.IsTableContainer },
+                        { "searchTerm", @ViewBag.searchTerm } })
+    }
+
+}
+
+
+
+
+
+
+

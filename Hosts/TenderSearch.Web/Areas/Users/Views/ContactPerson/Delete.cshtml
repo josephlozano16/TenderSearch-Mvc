@@ -1,0 +1,9 @@
+﻿@model ContactPerson
+
+@Html.Partial("_LayoutDelete",
+    Model,
+    new ViewDataDictionary {{ "ModelTitle", ViewBag.ModelTitle },
+        { "Title", ViewBag.Title },
+        { "ModelType", ViewBag.ModelType },
+        { "ReturnUrl", ViewBag.ReturnUrl }}
+    )

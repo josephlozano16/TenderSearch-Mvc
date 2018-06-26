@@ -1,0 +1,31 @@
+﻿@model  Eml.EntityBaseClasses.EntityBaseSoftDeleteInt
+@{
+    if (ViewBag.LayoutCreateContents == null) { ViewBag.LayoutCreateContents = "_LayoutCreateContents"; }
+}
+@using (Html.BeginForm(null,
+                        null,
+                        new
+                        {
+                            @ReturnUrl = ViewBag.ReturnUrl
+                        },
+                        FormMethod.Post,
+                        new { data_qpse_createconfirmation = "true" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="modal-body">
+        <div class="form-horizontal">
+            @Html.Partial(@ViewBag.LayoutCreateContents as string, Model, new ViewDataDictionary { { "LabelClassColumns", 3 } })
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <span id="busyindicatorCreate" style="display: none;">
+                    @Html.Partial("_BusyIndicatorSmall")
+                </span>
+                @Html.Partial("_AddButton")
+            </div>
+        </div>
+    </div>
+}

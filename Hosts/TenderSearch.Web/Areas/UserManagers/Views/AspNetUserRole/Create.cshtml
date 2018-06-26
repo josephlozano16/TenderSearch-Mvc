@@ -1,0 +1,8 @@
+﻿@model AspNetUserRole
+
+@Html.Partial("_LayoutCreate",
+                Model,
+                new ViewDataDictionary {{ "Title", ViewBag.Title },
+                                        { "ModelType", ViewBag.ModelType },
+                                        { "ReturnUrl", ViewBag.ReturnUrl }}
+                )

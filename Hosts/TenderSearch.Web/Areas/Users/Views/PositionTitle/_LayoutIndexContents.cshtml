@@ -1,0 +1,34 @@
+﻿@model IPagedList<PositionTitle>
+
+@{
+    ViewBag.ReturnUrl = ViewData["ReturnUrl"];
+    ViewBag.ParentId = ViewData["ParentId"];//optional for child models only
+}
+
+<tr>
+    <th>
+        @Html.DisplayNameFor(model => model.First().Title)
+    </th>
+    <th>
+        @Html.Partial("_AddButtonAjax",
+                        new ViewDataDictionary {{ "ParentId",  @ViewBag.ParentId },
+                                        { "ReturnUrl",  @ViewBag.ReturnUrl },
+                                        { "CreateActionName",  @ViewBag.CreateActionName},
+                                        { "Title", @ViewBag.Title} })
+    </th>
+</tr>
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.Partial("_EditDetailsDelete",
+                                    new ViewDataDictionary {{ "ID", item.Id },
+                                        { "ReturnUrl",  @ViewBag.ReturnUrl },
+                                         { "AllowEditModal",  true},
+                                        { "TargetName", item.Title } })
+        </td>
+    </tr>
+}

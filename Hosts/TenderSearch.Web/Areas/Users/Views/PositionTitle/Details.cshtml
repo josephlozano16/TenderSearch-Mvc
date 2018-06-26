@@ -1,0 +1,10 @@
+﻿@model PositionTitle
+
+@Html.Partial("_LayoutDetails",
+    Model,
+    new ViewDataDictionary {{ "ID", ViewBag.ID },
+        { "Title", ViewBag.Title },
+        { "ModelType", ViewBag.ModelType },
+        { "ReturnUrl", ViewBag.ReturnUrl }}
+    )
+

@@ -1,0 +1,94 @@
+﻿@model IPagedList<ContactPerson>
+
+@{
+    ViewBag.ReturnUrl = ViewData["ReturnUrl"];
+    ViewBag.ParentId = ViewData["ParentId"];//optional for child models only
+
+}
+<tr>
+    @{
+        if (@ViewBag.ParentId == null)
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.First().CompanyId)
+            </th>
+        }
+    }
+    <th>
+        @Html.DisplayNameFor(model => model.First().PositionTitleId)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.First().FirstName)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.First().LastName)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.First().ContractType)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.First().Email)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.First().PhoneNumber)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.First().Department)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.First().IsActive)
+    </th>
+    <th>
+        @Html.Partial("_AddButtonAjax",
+                        new ViewDataDictionary {{ "ParentId",  @ViewBag.ParentId },
+                                        { "ReturnUrl",  @ViewBag.ReturnUrl },
+                                        { "CreateActionName",  @ViewBag.CreateActionName},
+                                        { "Title", @ViewBag.Title} })
+    </th>
+</tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        @{
+            if (@ViewBag.ParentId == null)
+            {
+                <td nowrap>
+                    @item.Company.Name
+                </td>
+            }
+        }
+        <td>
+            @Html.DisplayFor(modelItem => item.PositionTitle.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContractType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PhoneNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Department)
+        </td>
+        <td style="text-align: center;">
+            @Html.DisplayFor(modelItem => item.IsActive)
+        </td>
+
+        <td>
+            @Html.Partial("_EditDetailsDelete",
+                                    new ViewDataDictionary {{ "ID", item.Id },
+                                        { "ReturnUrl",  @ViewBag.ReturnUrl },
+                                         { "AllowEditModal",  true},
+                                        { "TargetName", item.FirstName } })
+        </td>
+    </tr>
+            }

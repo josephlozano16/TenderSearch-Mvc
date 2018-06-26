@@ -1,0 +1,54 @@
+﻿@model  EntityBaseSoftDeleteInt
+
+@{
+    ViewBag.Title = ViewData["Title"];
+    ViewBag.ModelType = ViewData["ModelType"];
+    ViewBag.ReturnUrl = ViewData["ReturnUrl"];
+    ViewBag.ParentId = ViewData["ParentId"]; //optional. Received from parent
+                                             // ViewBag.ParentLabel = ViewData["ParentLabel"]; //optional. Received from parent
+    ViewBag.CreateCommitActionName = ViewData["CreateCommitActionName"]; //Optional used in Txn_Module
+
+    var fieldClassColumns = 10;
+    int? labelClassColumns = 2;
+    ViewBag.LabelClassColumns = ViewData["LabelClassColumns"];
+    if (ViewBag.LabelClassColumns != null) { labelClassColumns = ViewBag.LabelClassColumns; }//ViewBag.LabelClassColumns
+
+    fieldClassColumns = 12 - labelClassColumns.Value;
+    ViewBag.FieldClass = string.Format("col-md-{0} col-xs-12", fieldClassColumns);
+    ViewBag.LabelClass = string.Format("col-md-{0}", labelClassColumns.Value);
+}
+
+<h2 class="animated fadeIn">@ViewBag.Title</h2>
+
+@using (Html.BeginForm(@ViewBag.CreateCommitActionName as string, null, new { @ReturnUrl = @ViewBag.ReturnUrl }, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>@ViewBag.ModelType</h4>
+        <hr />
+
+        @Html.Partial("_LayoutCreateContents", Model,
+                         new ViewDataDictionary { { "ParentId", ViewBag.ParentId },
+                                     { "LabelClassColumns", ViewBag.LabelClassColumns }})
+        <div class="form-group">
+            <div class="@ViewBag.LabelClass">
+            </div>
+            <div class="@ViewBag.FieldClass">
+                @Html.Partial("_AddButton")
+            </div>
+        </div>
+
+        @*<div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    @Html.Partial("_AddButton")
+                </div>
+            </div>*@
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Goto", new { @ReturnUrl = @ViewBag.ReturnUrl })
+</div>
+
+

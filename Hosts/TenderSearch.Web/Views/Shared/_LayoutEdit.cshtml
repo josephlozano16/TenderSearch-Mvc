@@ -1,0 +1,64 @@
+﻿@model EntityBaseSoftDeleteInt
+@{
+    ViewBag.Title = ViewData["Title"];
+    ViewBag.ModelTitle = ViewData["ModelTitle"];
+    ViewBag.ModelType = ViewData["ModelType"];
+    ViewBag.ReturnUrl = ViewData["ReturnUrl"];
+    ViewBag.PAGE_SIZE = ViewData["PAGE_SIZE"];
+    ViewBag.ReturnUrlForChildren = ViewData["ReturnUrlForChildren"];
+    ViewBag.ChildrenOutsideBeginForm = ViewData["ChildrenOutsideBeginForm"];
+
+
+    var fieldClassColumns = 10;
+    int? labelClassColumns = 2;
+    ViewBag.LabelClassColumns = ViewData["LabelClassColumns"];
+    if (ViewBag.LabelClassColumns != null) { labelClassColumns = ViewBag.LabelClassColumns; }//ViewBag.LabelClassColumns
+
+    fieldClassColumns = 12 - labelClassColumns.Value;
+    ViewBag.FieldClass = string.Format("col-md-{0} col-xs-12", fieldClassColumns.ToString());
+    ViewBag.LabelClass = string.Format("col-md-{0}", labelClassColumns.Value.ToString());
+
+}
+
+@*@if (this.ViewContext.FormContext == null)
+    {
+        this.ViewContext.FormContext = new FormContext();
+    }*@
+<h2>@ViewBag.Title <strong class="animated bounceInRight"><em>@ViewBag.ModelTitle</em></strong></h2>
+
+@using (Html.BeginForm(null, null, new { @ReturnUrl = @ViewBag.ReturnUrl }, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>@ViewBag.ModelType</h4>
+        <hr />
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @Html.Partial("_LayoutEditContents", Model, new ViewDataDictionary { { "PAGE_SIZE", ViewBag.PAGE_SIZE },
+                                             { "LabelClassColumns", ViewBag.LabelClassColumns } })
+
+        <div class="form-group">
+            <div class="@ViewBag.LabelClass">
+            </div>
+            <div class="@ViewBag.FieldClass">
+                @Html.Partial("_EditButton")
+            </div>
+        </div>
+    </div>
+}
+
+
+@if (@ViewBag.ChildrenOutsideBeginForm != null)
+{
+    <div class="col-md-offset-2 col-md-10">
+        @Html.Partial(@ViewBag.ChildrenOutsideBeginForm as string, Model,
+        new ViewDataDictionary { { "PAGE_SIZE", ViewBag.PAGE_SIZE },
+                                { "ReturnUrlForChildren", ViewBag.ReturnUrlForChildren }
+        })
+    </div>
+}
+<div>
+    @Html.ActionLink("Back to List", "Goto", new { @ReturnUrl = @ViewBag.ReturnUrl })
+</div>

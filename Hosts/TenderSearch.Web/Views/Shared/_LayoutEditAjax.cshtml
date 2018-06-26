@@ -1,0 +1,31 @@
+﻿@model EntityBaseSoftDeleteInt
+
+@using (Html.BeginForm(null,
+                        null,
+                        new
+                        {
+                            @ReturnUrl = ViewBag.ReturnUrl
+                        },
+                        FormMethod.Post,
+                        new { data_qpse_editconfirmation = "true" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="modal-body">
+        <div class="form-horizontal">
+            @Html.Partial("_LayoutEditContents", Model, new ViewDataDictionary { { "LabelClassColumns", 3 } })
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <span id="busyindicatorEdit" style="display: none;">
+                    @Html.Partial("_BusyIndicatorSmall")
+                </span>
+                
+                @Html.Partial("_EditButton")
+            </div>
+        </div>
+    </div>
+}
+

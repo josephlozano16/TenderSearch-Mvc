@@ -1,0 +1,28 @@
+﻿@model IPagedList<object>
+@*TODO*@
+@{
+    ViewBag.PAGE_SIZE = ViewData["PAGE_SIZE"];
+    ViewBag.LayoutIndexContents = ViewData["LayoutIndexContents"]; //optional
+    ViewBag.IsTableContainer = ViewData["IsTableContainer"]; //optional
+    if (ViewBag.LayoutIndexContents == null) { ViewBag.LayoutIndexContents = "_LayoutIndexContents"; }
+    
+     
+}
+
+@Html.Partial(@ViewBag.LayoutIndexContents as string, Model,
+                                          new ViewDataDictionary {
+                                              { "ReturnUrl", @ViewBag.ReturnUrl },
+                                              { "ParentId", @ViewBag.ParentId },
+                                              { "Title", @ViewBag.Title },
+                                              { "AllowManualSorting", @ViewBag.AllowManualSorting },
+                                              { "ControllerName", @ViewBag.ControllerName },
+                                              { "CreateActionName", @ViewBag.CreateActionName }})
+@Html.Partial("_PagedList", Model,
+                         new ViewDataDictionary { { "TargetTableBody", @ViewBag.TargetTableBody },
+                    { "PageContainer", @ViewBag.PageContainer },
+                    { "ParentId", @ViewBag.ParentId },
+                    { "PAGE_SIZE", @ViewBag.PAGE_SIZE },
+                    { "ControllerName", @ViewBag.ControllerName },
+                    { "ReturnToParentListURL", @ViewBag.ReturnUrl },
+                    { "IsTableContainer", @ViewBag.IsTableContainer },
+                    { "searchTerm", @ViewBag.searchTerm } })

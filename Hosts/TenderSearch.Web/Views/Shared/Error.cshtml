@@ -1,0 +1,23 @@
+﻿@model HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+
+<h1 class="text-danger">Error.</h1>
+@{
+    if (@ViewBag.ErrorMessage == null)
+    {
+        <h2 class="text-danger">An error occurred while processing your request.</h2>
+        <h5 class="text-danger">@Model.Exception</h5>
+    }
+    else
+    {
+        <h2 class="text-danger">@Html.Raw(@ViewBag.ErrorMessage)</h2>
+        @*<h5 class="text-danger">@ViewBag.InnerException</h5>*@
+    }
+
+}
+
+
+

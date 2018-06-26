@@ -1,0 +1,14 @@
+﻿@model IEnumerable<ContactPerson>
+
+@Html.Partial("_LayoutIndex",
+    Model,
+    new ViewDataDictionary {{ "Title", ViewBag.Title },
+        { "ReturnUrl", ViewBag.ReturnUrl },
+        { "ParentId", ViewBag.ParentId },
+        { "ParentLabel", ViewBag.ParentLabel },
+        { "searchTerm", ViewBag.searchTerm },
+        { "TargetTable", ViewBag.TargetTableBody},
+        { "AllowCreate", false},
+        { "PAGE_SIZE", ViewBag.PAGE_SIZE},
+        { "ReturnToParentListURL", ViewBag.ReturnToParentListURL }}
+    )

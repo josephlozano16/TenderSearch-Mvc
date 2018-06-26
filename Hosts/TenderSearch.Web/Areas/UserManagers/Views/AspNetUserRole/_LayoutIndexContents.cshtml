@@ -1,0 +1,63 @@
+﻿@model IPagedList<AspNetUserRole>
+
+@{
+    ViewBag.ReturnUrl = ViewData["ReturnUrl"];
+    ViewBag.ParentId = ViewData["ParentId"];//optional for child models only
+    
+}
+
+<tr>
+
+    @{
+        if (@ViewBag.ParentId == null)
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.First().UserName)
+            </th>
+        }
+    }
+    @*<th>
+        @Html.DisplayNameFor(model => model.First().Email)
+    </th>*@
+    <th>
+        @Html.DisplayNameFor(model => model.First().Role)
+    </th>
+    <th>
+        @Html.Partial("_AddButtonAjax",
+                        new ViewDataDictionary {{ "ParentId",  @ViewBag.ParentId },
+                                        { "ReturnUrl",  @ViewBag.ReturnUrl },
+                                        { "CreateActionName",  @ViewBag.CreateActionName},
+                                        { "Title", @ViewBag.Title} })
+    </th>
+</tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+
+        @{
+            if (@ViewBag.ParentId == null)
+            {
+                <td nowrap>
+                    @item.UserName
+                </td>
+            }
+        }
+        @*<td nowrap>
+            @Html.DisplayTextFor(modelItem => item.Email)
+        </td>*@
+        <td nowrap>
+            @Html.DisplayFor(modelItem => item.Role)
+        </td>
+        <td>
+            @Html.Partial("_EditDetailsDelete",
+                                    new ViewDataDictionary {{ "ID", item.UserName },
+                                        { "ReturnUrl",  @ViewBag.ReturnUrl },
+                                        { "AllowDetails",  false },
+                                        { "AllowEditModal",  true },
+                                        { "RoleName",  item.Role},
+                                        { "TargetName", item.Role} })
+        </td>
+    </tr>
+}
+

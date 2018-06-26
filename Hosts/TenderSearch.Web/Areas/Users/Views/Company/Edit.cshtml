@@ -1,0 +1,10 @@
+﻿@model Company
+
+@Html.Partial("_LayoutEdit",
+                Model,
+                new ViewDataDictionary {{ "ModelTitle", ViewBag.ModelTitle },
+                                        { "Title", ViewBag.Title },
+                                        { "ModelType", ViewBag.ModelType },
+                                        { "ReturnUrl", ViewBag.ReturnUrl }}
+                )
+ 

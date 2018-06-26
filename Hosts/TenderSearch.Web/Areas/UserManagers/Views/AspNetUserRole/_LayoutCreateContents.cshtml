@@ -1,0 +1,84 @@
+﻿@model  AspNetUserRole
+
+@{
+    var VM = new VmAspNetUserRole(Model);
+    var fieldClassColumns = 10;
+    int? labelClassColumns = 2;
+    ViewBag.LabelClassColumns = ViewData["LabelClassColumns"];
+    if (ViewBag.LabelClassColumns != null) { labelClassColumns = ViewBag.LabelClassColumns; } //replace labelClassColumns = 4 if you need to increase values
+
+    fieldClassColumns = 12 - labelClassColumns.Value;
+    ViewBag.FieldClass = string.Format("col-md-{0} col-xs-12", fieldClassColumns);
+    ViewBag.LabelClass = string.Format("col-md-{0} ", labelClassColumns.Value);
+}
+
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+<div class="form-group">
+    @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label " + @ViewBag.LabelClass })
+    @Html.HiddenFor(model => model.OldRole)
+    <div class="@ViewBag.FieldClass">
+        @{
+            if (!VM.HasParent())
+            {
+                @Html.HiddenFor(model => model.UserName)
+                @Html.EditorFor(model => model.UserName,
+                           new
+                           {
+                               htmlAttributes = new
+                               {
+                                   @class = "form-control",
+                                   @readonly = true
+                               }
+                           })
+            }
+            else
+            {
+                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+            }
+        }
+    </div>
+</div>
+
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label " + @ViewBag.LabelClass })
+    <div class="@ViewBag.FieldClass">
+        @{
+            if (!VM.HasParent())
+            {
+                @Html.HiddenFor(model => model.Email)
+                @Html.EditorFor(model => model.Email,
+                           new
+                           {
+                               htmlAttributes = new
+                               {
+                                   @class = "form-control",
+                                   @readonly = true
+                               }
+                           })
+                @*<label class="form-control text-box single-line"
+                       style="width: 280px; background-color: #eeeeee;">
+                    @Model.Email
+                </label>*@
+            }
+            else
+            {
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            }
+        }
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Role, htmlAttributes: new { @class = "control-label " + @ViewBag.LabelClass })
+    <div class="@ViewBag.FieldClass">
+        @Html.DropDownListFor(model => model.Role,
+                                        VM.GetRoles(),
+                                        htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
+    </div>
+</div>
+

@@ -1,0 +1,25 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutLandingPage.cshtml";
+
+}
+
+<p>The proposal setup has been finalized and is now ready for next action </p>
+<p>Please see below details:</p>
+<table class="table table-striped table-bordered">
+    <tr>
+        <td>Proposal Number</td>
+        <td>@ViewBag.ProposalNumber</td>
+        
+    </tr>
+    <tr>
+        <td>Proposal Name</td>
+        <td>@ViewBag.ProposalName</td>
+    </tr>
+    <tr>
+        <td>Client Name</td>
+        <td>@ViewBag.ClientName</td>
+    </tr>
+</table>
+<p>
+    Click&nbsp;@Html.ActionLink("here","Index","Txn_Proposal")&nbsp;here to go back to proposals list.
+</p>

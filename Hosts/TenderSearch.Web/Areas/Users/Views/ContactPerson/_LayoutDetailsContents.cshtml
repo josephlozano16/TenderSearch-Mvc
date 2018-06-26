@@ -1,0 +1,78 @@
+﻿@model ContactPerson
+ 
+<dl class="dl-horizontal">
+
+    <dt>
+        @Html.DisplayNameFor(model => model.CompanyId)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Company.Name)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.PositionTitleId)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.PositionTitle.Title)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.FirstName)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.FirstName)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.LastName)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.LastName)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.ContractType)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.ContractType)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.Email)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Email)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.PhoneNumber)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.PhoneNumber)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.Department)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Department)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.IsActive)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.IsActive)
+    </dd>
+
+
+</dl>

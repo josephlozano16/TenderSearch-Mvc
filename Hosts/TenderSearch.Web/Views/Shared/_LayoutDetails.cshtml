@@ -1,0 +1,34 @@
+﻿@model EntityBaseSoftDeleteInt
+
+@{
+    ViewBag.ID = ViewData["ID"];
+    ViewBag.Title = ViewData["Title"];
+    ViewBag.ModelType = ViewData["ModelType"];
+    ViewBag.AllowEdit = ViewData["AllowEdit"];
+    ViewBag.ReturnUrl = ViewData["ReturnUrl"];
+    if (ViewBag.AllowEdit == null) { ViewBag.AllowEdit = true; }
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <h4 class="animated bounce">@ViewBag.ModelType</h4>
+    <hr />
+    @Html.Partial("_LayoutDetailsContents", Model)
+</div>
+<p>
+
+    @if (ViewBag.AllowEdit)
+    {
+        @Html.ActionLink("Edit", "Edit", new { @id = @ViewBag.ID, @ReturnUrl = @ViewBag.ReturnUrl })
+        <span>|</span>
+        @Html.ActionLink("Back to List", "Goto", new { @ReturnUrl = @ViewBag.ReturnUrl })
+    }
+    else
+    {
+        @Html.ActionLink("Back to List", "Goto", new { @ReturnUrl = @ViewBag.ReturnUrl })
+    }
+
+
+</p>
+

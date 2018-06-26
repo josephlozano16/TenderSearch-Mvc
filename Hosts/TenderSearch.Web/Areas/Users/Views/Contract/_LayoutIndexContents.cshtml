@@ -1,0 +1,101 @@
+﻿@model IPagedList<Contract>
+
+@{
+    ViewBag.ReturnUrl = ViewData["ReturnUrl"];
+    ViewBag.ParentId = ViewData["ParentId"];//optional for child models only
+
+}
+
+<tr>
+    @{
+        if (@ViewBag.ParentId == null)
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.First().CompanyId)
+            </th>
+        }
+    }
+    <th>
+        @Html.DisplayNameFor(model => model.First().ContractType)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.First().DateSigned)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.First().RenewalDate)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.First().EndDate)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.First().Price)
+    </th>
+    <th>
+        @Html.Partial("_AddButtonAjax",
+                        new ViewDataDictionary {{ "ParentId",  @ViewBag.ParentId },
+                                        { "ReturnUrl",  @ViewBag.ReturnUrl },
+                                        { "CreateActionName",  @ViewBag.CreateActionName},
+                                        { "Title", @ViewBag.Title} })
+    </th>
+</tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        @{
+            if (@ViewBag.ParentId == null)
+            {
+                <td nowrap>
+                    @item.Company.Name
+                </td>
+            }
+        }
+        <td nowrap>
+            @Html.DisplayFor(modelItem => item.ContractType)
+        </td>
+        <td nowrap align="right">
+            @Html.DisplayFor(modelItem => item.DateSigned)
+        </td>
+        <td nowrap align="right">
+            @Html.DisplayFor(modelItem => item.RenewalDate)
+        </td>
+        <td nowrap align="right">
+            @{
+                var expirationCountDown = VmContract.GetExpirationCountDown(item);
+                if (expirationCountDown.HasValue)
+                {
+                    if (expirationCountDown.Value <= 0)
+                    {
+                        <div>
+                            <span class="text-danger">
+                                <i class="fa fa-info-circle"></i>
+                                Expired!
+                            </span>
+                        </div>
+                    }
+                    else
+                    {
+                        <div>
+                            <span class="text-info">
+                                <i class="fa fa-info-circle"></i>
+                                Expires soon!
+                            </span>
+                        </div>
+
+                    }
+                }
+            }
+            @Html.DisplayFor(modelItem => item.EndDate)
+        </td>
+        <td nowrap align="right">
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+            @Html.Partial("_EditDetailsDelete",
+                                    new ViewDataDictionary {{ "ID", item.Id },
+                                        { "ReturnUrl",  @ViewBag.ReturnUrl },
+                                         { "AllowEditModal",  true},
+                                        { "TargetName", item.ContractType } })
+        </td>
+    </tr>
+            }

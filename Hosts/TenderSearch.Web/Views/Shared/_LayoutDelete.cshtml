@@ -1,0 +1,38 @@
+﻿@model  Eml.EntityBaseClasses.EntityBaseSoftDeleteInt
+
+@{
+    ViewBag.Title = ViewData["Title"];
+    ViewBag.ModelType = ViewData["ModelType"];
+    ViewBag.ModelTitle = ViewData["ModelTitle"];
+    ViewBag.ReturnUrl = ViewData["ReturnUrl"];
+    ViewBag.UserName = ViewData["UserName"]; //optional used in UserManager_Base
+    ViewBag.RoleName = ViewData["RoleName"]; //optional used in UserManager_Base
+
+}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Are you sure you want to delete <strong><em>@ViewBag.ModelTitle</em></strong> ?</h3>
+<div>
+    <h4>@ViewBag.ModelType</h4>
+    <hr />
+
+    @Html.Partial("_LayoutDeleteContents", Model)
+
+    @using (Html.BeginForm(null, null,
+            new
+            {
+                @UserName = ViewBag.UserName,
+                @RoleName = ViewBag.RoleName,
+                @ReturnUrl = @ViewBag.ReturnUrl
+            },
+                    FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            @Html.Partial("_DeleteButton") |
+            @Html.ActionLink("Back to List", "Goto", new { @ReturnUrl = @ViewBag.ReturnUrl })
+        </div>
+    }
+</div>

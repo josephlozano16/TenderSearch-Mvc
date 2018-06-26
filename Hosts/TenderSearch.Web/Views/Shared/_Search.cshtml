@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.ParentId = ViewData["ParentId"];
+    ViewBag.TargetTableBody = ViewData["TargetTableBody"];
+    ViewBag.ControllerName = ViewData["ControllerName"];
+    if (ViewBag.TargetTableBody == null) { ViewBag.TargetTableBody = "pagedTable"; }
+    ViewBag.ReturnToParentListURL = ViewData["ReturnToParentListURL"];
+}
+
+<form method="get" action="@Url.Action("Index", @ViewBag.ControllerName as string, new { @ParentId = @ViewBag.ParentId, @ReturnToParentListURL = @ViewBag.ReturnToParentListURL })"
+      data-qpse-ajax="true"
+      data-qpse-targettablebody="#@ViewBag.TargetTableBody"
+      class="navbar-form navbar-right"
+      role="search">
+    <div class="input-group">
+        <input name="searchTerm" id="searchTerm" type="text" placeholder="Search by name..."
+               class="form-control "
+               data-qpse-autocomplete="@Url.Action("AutoComplete", ViewBag.ControllerName, new { @ParentId = @ViewBag.ParentId })">
+        <span class="input-group-btn">
+            <i id="searchclear" class="fa fa-times-circle animated rubberBand bounce" aria-hidden="true" style="display: none;"></i>
+            <button type="submit" class="btn btn-primary" title="Search by Name" id="searchButton">
+                <i class="fa fa-search-plus" data-qpse-searchbutton="true"></i>
+            </button>
+        </span>
+    </div>
+</form>
+<script type="text/javascript">
+    setTimeout(function () {
+        $("#searchTerm").keyup(function () {
+            $("#searchclear").toggle(Boolean($(this).val()));
+        });
+        $("#searchclear").toggle(Boolean($("#searchTerm").val()));
+        $("#searchclear").click(function () {
+            $("#searchTerm").val("");
+            $(this).hide();
+            $("#searchButton").click();
+        });
+    }, 1000);
+</script>

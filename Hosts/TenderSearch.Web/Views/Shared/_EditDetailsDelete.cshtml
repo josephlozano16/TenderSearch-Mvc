@@ -1,0 +1,183 @@
+﻿@{
+    ViewBag.ID = ViewData["ID"];
+    ViewBag.ReturnUrl = ViewData["ReturnUrl"];
+    ViewBag.TargetName = ViewData["TargetName"];
+    ViewBag.AllowDetails = ViewData["AllowDetails"];
+    ViewBag.AllowEdit = ViewData["AllowEdit"];
+    ViewBag.AllowEditModal = ViewData["AllowEditModal"];
+    ViewBag.RoleName = ViewData["RoleName"]; //Optional
+    ViewBag.AllowCopy = ViewData["AllowCopy"];//Optional
+
+    ViewBag.AllowEstimate = ViewData["AllowEstimate"];//Optional
+    ViewBag.AllowLaborEstimate = ViewData["AllowLaborEstimate"];//Optional
+    ViewBag.AllowViewReports = ViewData["AllowViewReports"];//Optional
+    ViewBag.AllowExpenses = ViewData["AllowExpenses"];//Optional
+    ViewBag.AllowMaterials = ViewData["AllowMaterials"];//Optional
+    ViewBag.AllowSubcontractors = ViewData["AllowSubcontractors"];//Optional
+    ViewBag.AllowEquipment = ViewData["AllowEquipment"];//Optional
+    ViewBag.AllowDelete = ViewData["AllowDelete"];//Optional
+    ViewBag.AllowUnlock = ViewData["AllowUnlock"];//Optional
+    ViewBag.AllowSummaryReport = ViewData["AllowSummaryReport"];//Optional
+    ViewBag.AllowProjectManagementReport = ViewData["AllowProjectManagementReport"];//Optional
+    ViewBag.ControllerName = ViewData["ControllerName"];
+
+    ViewBag.DeleteActionName = ViewData["DeleteActionName"]; //Optional
+    if (ViewBag.DeleteActionName == null) { ViewBag.DeleteActionName = "Delete"; }
+
+    ViewBag.UnlockActionName = ViewData["UnlockActionName"]; //Optional
+    if (ViewBag.UnlockActionName == null) { ViewBag.UnlockActionName = "Unlock"; }
+
+    ViewBag.ParentId = ViewData["ParentId"];
+
+    if (ViewBag.AllowEstimate == null) { ViewBag.AllowEstimate = false; }
+    if (ViewBag.AllowLaborEstimate == null) { ViewBag.AllowLaborEstimate = false; }
+    if (ViewBag.AllowViewReports == null) { ViewBag.AllowViewReports = false; }
+    if (ViewBag.AllowExpenses == null) { ViewBag.AllowExpenses = false; }
+    if (ViewBag.AllowMaterials == null) { ViewBag.AllowMaterials = false; }
+    if (ViewBag.AllowSubcontractors == null) { ViewBag.AllowSubcontractors = false; }
+    if (ViewBag.AllowEquipment == null) { ViewBag.AllowEquipment = false; }
+
+    if (ViewBag.AllowCopy == null) { ViewBag.AllowCopy = false; }
+    if (ViewBag.AllowEdit == null) { ViewBag.AllowEdit = true; }
+    if (ViewBag.AllowEditModal == null) { ViewBag.AllowEditModal = false; }
+    if (ViewBag.AllowDetails == null) { ViewBag.AllowDetails = false; }
+    if (ViewBag.AllowDelete == null) { ViewBag.AllowDelete = true; }
+    if (ViewBag.AllowUnlock == null) { ViewBag.AllowUnlock = false; }
+    if (ViewBag.AllowSummaryReport == null) { ViewBag.AllowSummaryReport = false; }
+    if (ViewBag.AllowProjectManagementReport == null) { ViewBag.AllowProjectManagementReport = false; }
+
+    if (ViewBag.AllowContracts == null) { ViewBag.AllowContracts = false; }
+    if (ViewBag.AllowContactPersons == null) { ViewBag.AllowContactPersons = false; }
+
+    if (ViewBag.RoleName != null)
+    {  //this only happens in AspNetUserRole
+        ViewBag.UserName = ViewBag.ID;
+        ViewBag.ID = null;
+    }
+
+}
+
+
+@functions{
+    public string GetSeparator(string viewBagName)
+    {
+        var viewBags = new List<SelectListItem> {
+            new SelectListItem{Text ="AllowEstimate", Value = ((bool)ViewBag.AllowEstimate).ToString() },
+            new SelectListItem{Text ="AllowLaborEstimate", Value = ((bool)ViewBag.AllowLaborEstimate).ToString()},
+            new SelectListItem{Text ="AllowCopy", Value = ((bool)ViewBag.AllowCopy).ToString()},
+            new SelectListItem{Text ="AllowEdit", Value = ((bool)ViewBag.AllowEdit).ToString()},
+            new SelectListItem{Text ="AllowExpenses", Value = ((bool)ViewBag.AllowExpenses).ToString()},
+            new SelectListItem{Text ="AllowSubcontractors", Value = ((bool)ViewBag.AllowSubcontractors).ToString()},
+            new SelectListItem{Text ="AllowMaterials", Value = ((bool)ViewBag.AllowMaterials).ToString()},
+            new SelectListItem{Text ="AllowViewReports", Value =((bool)ViewBag.AllowViewReports).ToString()},
+            new SelectListItem{Text ="AllowEquipment", Value = ((bool)ViewBag.AllowEquipment).ToString()},
+            new SelectListItem{Text ="AllowDetails", Value = ((bool)ViewBag.AllowDetails).ToString()},
+            new SelectListItem{Text ="AllowDelete", Value = ((bool)ViewBag.AllowDelete).ToString()},
+            new SelectListItem{Text ="AllowUnlock", Value = ((bool)ViewBag.AllowUnlock).ToString()},
+            new SelectListItem{Text ="AllowSummaryReport", Value = ((bool)ViewBag.AllowSummaryReport).ToString()},
+            new SelectListItem{Text ="AllowProjectManagementReport", Value = ((bool)ViewBag.AllowProjectManagementReport).ToString()},
+            new SelectListItem{Text ="AllowContracts", Value = ((bool)ViewBag.AllowContracts).ToString()},
+            new SelectListItem{Text ="AllowContactPersons", Value = ((bool)ViewBag.AllowContactPersons).ToString()}
+        };
+
+        var canEvaluate = false;
+        foreach (var item in viewBags)
+        {
+            if (item.Text.ToLower() == viewBagName.ToLower()) canEvaluate = true;
+            if (canEvaluate)
+            {
+                if (item.Value.ToLower() == "true" && item.Text.ToLower() != viewBagName.ToLower())
+                    return " |";
+            }
+        }
+
+        return string.Empty;
+    }
+}
+
+
+<div style="white-space: nowrap">
+    @if (ViewBag.AllowEdit)
+    {
+
+        @Html.ActionLink("Edit", "Edit", ViewBag.ControllerName as string,
+                                new
+                                {
+                                    @id = ViewBag.ID, //will be ignored in URL if null @ViewBag.ID
+                                    @UserName = ViewBag.UserName,        //pass UserName instead fo id. used in AspNetUserRole
+                                    @RoleName = ViewBag.RoleName,
+                                    @ReturnUrl = ViewBag.ReturnUrl
+                                },
+                                    new
+                                    {
+                                        data_qpse_editlink = ViewBag.AllowEditModal,
+                                        data_qpse_editname = "'" + ViewBag.TargetName + "'",
+                                        data_target = "#editItemModal"
+                                    })
+        @GetSeparator("AllowEdit")
+    }
+
+
+    @if (ViewBag.AllowDetails)
+    {
+        @Html.ActionLink("Details", "Details", ViewBag.ControllerName as string, new { @id = ViewBag.ID, @ReturnUrl = ViewBag.ReturnUrl })
+        @GetSeparator("AllowDetails")
+    }
+
+
+    @if (ViewBag.AllowDelete)
+    {
+
+        @Html.ActionLink("Delete",
+                         ViewBag.DeleteActionName as string, ViewBag.ControllerName as string,
+                                        new
+                                        {
+                                            @id = ViewBag.ID, //will be ignored in URL if null @ViewBag.ID
+                                            @UserName = ViewBag.UserName,        //pass UserName instead fo id. used in AspNetUserRole
+                                            @RoleName = ViewBag.RoleName,
+                                            @ReturnUrl = ViewBag.ReturnUrl
+                                        },
+                                        new
+                                        {
+                                            @class = "delete-link",
+                                            data_qpse_deletelink = "true",
+                                            data_qpse_deletename = "'" + ViewBag.TargetName + "'",
+                                            data_target = "#deleteConfirmationModal"
+                                        })
+        @GetSeparator("AllowDelete")
+    }
+    
+
+    @if (ViewBag.AllowContracts)
+    {
+        @Html.ActionLink("Contracts", "GetChildren", new { @ParentId = ViewBag.ParentId, ReturnToParentListURL = ViewBag.ReturnUrl, subCategory = "Contract" })
+
+        @*@Html.ActionLink("Contracts", "Index", "Contract",
+            new
+            {
+                @id = ViewBag.ID, //will be ignored in URL if null @ViewBag.ID
+                @UserName = ViewBag.UserName,        //pass UserName instead fo id. used in AspNetUserRole
+                @RoleName = ViewBag.RoleName,
+                @ReturnUrl = ViewBag.ReturnUrl
+            },
+            null)*@
+        @GetSeparator("AllowContracts")
+    }
+
+    @if (ViewBag.AllowContactPersons)
+    {
+        @Html.ActionLink("ContactPersons", "GetChildren", new { @ParentId = ViewBag.ParentId, ReturnToParentListURL = ViewBag.ReturnUrl, subCategory = "ContactPerson" })
+
+        @*@Html.ActionLink("ContactPersons", "Index", "ContactPerson",
+            new
+            {
+                @id = @ViewBag.ID, //will be ignored in URL if null @ViewBag.ID
+                @UserName = @ViewBag.UserName,        //pass UserName instead fo id. used in AspNetUserRole
+                @RoleName = @ViewBag.RoleName,
+                @ReturnUrl = @ViewBag.ReturnUrl
+            },
+            null)*@
+        @GetSeparator("AllowContactPersons")
+    }
+    
+</div>

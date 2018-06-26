@@ -1,0 +1,12 @@
+﻿@model IPagedList<Company>
+ 
+@Html.Partial("_LayoutIndex",
+                Model,
+                new ViewDataDictionary {{ "Title", ViewBag.Title },
+                                        { "ReturnUrl", ViewBag.ReturnUrl },
+                                        { "ParentId", ViewBag.ParentId },
+                                        { "TargetTable", ViewBag.TargetTableBody},
+                                        { "AllowCreate", false},
+                                        { "PAGE_SIZE", ViewBag.PAGE_SIZE},
+                                        { "searchTerm", ViewBag.searchTerm }}
+                )

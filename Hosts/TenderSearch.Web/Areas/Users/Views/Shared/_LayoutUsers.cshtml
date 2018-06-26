@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    @Html.Partial("_Favicon")
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - TenderSearch</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                @Html.Partial("_NavbarHeader")
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    @if (ViewBag.RoleCount > 1)
+                    {
+                        <li class="@Html.IsActiveController("Dashboard")">@Html.ActionLink("Dashboard", "Index", "Dashboard", new { area = "" }, null)</li>
+                    }
+                    <li class="@Html.IsActiveController("Company") ">@Html.ActionLink("Company", "Index", "Company") </li>
+                    <li class="@Html.IsActiveController("Contract") ">@Html.ActionLink("Contracts", "Index", "Contract") </li>
+                    <li class="@Html.IsActiveController("ContactPerson") ">@Html.ActionLink("ContactPersons", "Index", "ContactPerson") </li>
+                    <li class="@Html.IsActiveController("PositionTitle") ">@Html.ActionLink("PositionTitles", "Index", "PositionTitle") </li>
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+
+        @RenderBody()
+
+        @Html.Partial("_Footer")
+
+
+    </div>
+    @Html.Partial("_DeleteConfirmation")
+    @Scripts.Render("~/bundles/client")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
