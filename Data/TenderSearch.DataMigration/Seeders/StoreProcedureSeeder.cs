@@ -13,22 +13,29 @@ namespace TenderSearch.DataMigration.Seeders
         {
             Seeder.Execute("StoreProcedures", () =>
             {
-                var baseDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"SqlScripts");
-                var sqlFilesForDrop = Directory.GetFiles(baseDirectory, "Drop*.sql").ToList();
-                var sqlFilesForCreate = Directory.GetFiles(baseDirectory, "Create*.sql").ToList();
+                var sqlForDrop = GetDropScriptForGetContractDuplicates();
+                var sqlForCreate = GetCreateScriptForGetContractDuplicates();
 
-                sqlFilesForDrop.ForEach(fn =>
-                {
-                    context.Database.ExecuteSqlCommand(File.ReadAllText(fn), new object[0]);
-                });
-
-                sqlFilesForCreate.ForEach(fn =>
-                {
-                    context.Database.ExecuteSqlCommand(File.ReadAllText(fn), new object[0]);
-                });
-
+                context.Database.ExecuteSqlCommand(sqlForDrop, new object[0]);
+                context.Database.ExecuteSqlCommand(sqlForCreate, new object[0]);
                 context.DoSave("StoreProcedures");
             });
+        }
+
+        public static string GetCreateScriptForGetContractDuplicates()
+        {
+            var baseDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"SqlScripts");
+            var sqlForCreate = Directory.GetFiles(baseDirectory, "Create*.sql").First();
+
+            return File.ReadAllText(sqlForCreate);
+        }
+
+        public static string GetDropScriptForGetContractDuplicates()
+        {
+            var baseDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"SqlScripts");
+            var sqlForDrop = Directory.GetFiles(baseDirectory, "Drop*.sql").First();
+
+            return File.ReadAllText(sqlForDrop);
         }
     }
 }
